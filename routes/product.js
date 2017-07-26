@@ -9,6 +9,18 @@ var slugify = require('slugify');
 module.exports = function(wagner) {
   var api = express.Router();
 
+  api.post('/', wagner.invoke(function(Product) {
+    return function(req, res) {
+
+      Product.create(req.body.title,req.body.description, null , () => {
+        res.json({
+          status: 'SUCCESS'
+        });
+      });
+
+    };
+  }));
+
   api.get('/', wagner.invoke(function(Product) {
     return function(req, res) {
 
@@ -63,7 +75,26 @@ module.exports = function(wagner) {
       });
     };
   }));
+  
+  api.put('/:slug', wagner.invoke(function(Product, ProductImage) {
+    return function(req, res) {
+      Product.update(req.body, () => {
+            res.json({
+          status: 'SUCCESS'
+        });
 
+        })
+    };
+  }));
+
+
+  api.delete('/:id', wagner.invoke(function(Product) {
+    return function(req, res) {
+      Product.delete( req.params.id, () => {
+        res.json({status: 'SUCCESS'})
+      });
+    };
+  }));
 
   api.delete('/:slug/images/remove/:image_id', wagner.invoke(function(Product, ProductImage) {
     return function(req, res) {

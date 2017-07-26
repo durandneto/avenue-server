@@ -39,9 +39,19 @@ var ProductTable = (function(){
         _callback()
     }
     , update : function(product, _callback) {
+      var p = {}
+      
+      p.$id= product.id
 
-      db.run("update "+ this.table_name + " set title = $title where id = $id"
-      , { $title: product.title , $id: product.id} );
+      if (product.title) {
+        p.$title = product.title
+      }
+      if (product.description) {
+        p.$description = product.description
+      }
+
+      db.run("update "+ this.table_name + " set title = $title,  description = $description where id = $id"
+      , p );
       if ( _callback ) 
         _callback()
     }
